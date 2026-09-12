@@ -1,0 +1,51 @@
+/*
+Theme Name: Fernwood
+Description: The Fernwood Journal theme — a quiet reading layout for long-form nature writing.
+Version: 0.1.0
+*/
+:root {
+  --ink: #1f2a24;
+  --ink-2: #5b6b62;
+  --paper: #f7f4ec;
+  --rule: #ded7c6;
+  --fern: #3f6b4e;
+  --fern-dark: #2d4f39;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 17px/1.65 Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+}
+.wrap { max-width: 46rem; margin: 0 auto; padding: 0 1.25rem; }
+header.masthead { border-bottom: 1px solid var(--rule); padding: 2.25rem 0 1.25rem; text-align: center; }
+.masthead h1 { margin: 0; font-size: 2.4rem; letter-spacing: 0.02em; font-weight: normal; }
+.masthead .tagline { color: var(--ink-2); font-style: italic; margin: 0.25rem 0 0; }
+.kicker {
+  color: var(--fern); font: 600 0.72rem/1 -apple-system, 'Segoe UI', sans-serif;
+  letter-spacing: 0.14em; text-transform: uppercase; margin: 2rem 0 0.4rem;
+}
+article { border-bottom: 1px solid var(--rule); padding: 1.25rem 0 1.5rem; }
+article h2 { margin: 0 0 0.35rem; font-size: 1.45rem; font-weight: normal; }
+article .meta { color: var(--ink-2); font-size: 0.85rem; margin: 0 0 0.6rem; }
+article p { margin: 0; }
+.newsletter {
+  margin: 2.5rem 0; padding: 1.5rem; border: 1px solid var(--rule); border-radius: 6px; background: #fffdf7;
+}
+.newsletter h3 { margin: 0 0 0.3rem; font-weight: normal; font-size: 1.3rem; }
+.newsletter p { margin: 0 0 1rem; color: var(--ink-2); }
+.newsletter form { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.newsletter input[type='email'] {
+  flex: 1 1 14rem; font: inherit; padding: 0.55rem 0.75rem; border: 1px solid var(--rule); border-radius: 4px;
+}
+.newsletter button {
+  font: 600 0.95rem/1 -apple-system, 'Segoe UI', sans-serif; padding: 0.7rem 1.2rem; border: 0; border-radius: 4px;
+  background: var(--fern); color: #fff; cursor: pointer;
+}
+.newsletter button:hover { background: var(--fern-dark); }
+.newsletter button:disabled { background: #b9c2bc; cursor: not-allowed; }
+.newsletter .result { margin-top: 0.85rem; font: 0.9rem/1.5 -apple-system, 'Segoe UI', sans-serif; }
+.newsletter .result.bad { color: #9b2c2c; }
+.newsletter .result.good { color: var(--fern-dark); }
+footer.site { color: var(--ink-2); font-size: 0.85rem; padding: 1.5rem 0 3rem; text-align: center; }

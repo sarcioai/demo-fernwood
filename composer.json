@@ -1,0 +1,15 @@
+{
+  "name": "sarcio/demo-fernwood",
+  "description": "Fernwood Journal (fictional) — a real WordPress whose subscribe button and newsletter route are both broken, patched live by the Sarcio plugin.",
+  "type": "project",
+  "license": "UNLICENSED",
+  "require": {
+    "php": ">=8.2",
+    "sarcio/wordpress": "^0.1.1"
+  },
+  "repositories": [
+    { "type": "vcs", "url": "https://github.com/sarcioai/sarcio-wordpress" },
+    { "type": "vcs", "url": "https://github.com/sarcioai/sarcio-php-shim" }
+  ],
+  "config": { "sort-packages": true }
+}

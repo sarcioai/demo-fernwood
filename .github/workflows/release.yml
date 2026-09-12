@@ -1,0 +1,40 @@
+# A `v*` tag builds the image for arm64 + amd64 and pushes it to GHCR, where the
+# Sarcio demo stack pulls it. Needs one secret:
+#   SARCIO_PACKAGES_TOKEN — a GitHub token with read access to the private
+#   sarcioai shim repos, used only as the Composer VCS credential.
+name: release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        run: echo '${{ secrets.GITHUB_TOKEN }}' | docker login ghcr.io -u '${{ github.actor }}' --password-stdin
+
+      - name: Render the Composer credential for the build secret
+        run: printf '{"github-oauth":{"github.com":"%s"}}' '${{ secrets.SARCIO_PACKAGES_TOKEN }}' > "$RUNNER_TEMP/auth.json"
+
+      - name: Build and push
+        run: |
+          tag='${{ github.ref_name }}'
+          tag="${tag#v}"
+          if [ '${{ github.event_name }}' = 'workflow_dispatch' ]; then tag=dev; fi
+          docker buildx build \
+            --platform linux/arm64,linux/amd64 \
+            --secret id=composer_auth,src="$RUNNER_TEMP/auth.json" \
+            --label "org.opencontainers.image.source=https://github.com/${{ github.repository }}" \
+            -t "ghcr.io/${{ github.repository }}:$tag" \
+            --push .

@@ -1,0 +1,15 @@
+# Pull requests — including the ones Sarcio opens with a permanent fix — must
+# still lint as PHP.
+name: ci
+on:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: php -l
+        run: |
+          find . -name '*.php' -not -path './vendor/*' -print0 \
+            | xargs -0 -n1 docker run --rm -v "$PWD:/src" -w /src php:8.4-cli-alpine php -l
