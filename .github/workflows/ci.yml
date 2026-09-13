@@ -1,11 +1,14 @@
 # Pull requests — including the ones Sarcio opens with a permanent fix — must
 # still lint as PHP.
-name: ci
+# The workflow name is the build Jira lists in a ticket's Development panel
+# (via GitHub for Atlassian); the job name is the check shown on the PR.
+name: 'CI: PHP lint'
 on:
   pull_request:
   workflow_dispatch:
 jobs:
   lint:
+    name: PHP lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
