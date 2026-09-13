@@ -36,9 +36,7 @@ add_action('rest_api_init', static function (): void {
 });
 
 /**
- * `POST /wp-json/fernwood/v1/subscribe`. WordPress hands this the request AFTER
- * Sarcio has applied any live verdict, so a `defaultValue` server patch supplies
- * `list` before this code runs.
+ * `POST /wp-json/fernwood/v1/subscribe`.
  */
 function fernwood_subscribe(WP_REST_Request $request): WP_REST_Response
 {
@@ -50,10 +48,9 @@ function fernwood_subscribe(WP_REST_Request $request): WP_REST_Response
         return new WP_REST_Response(['error' => 'a valid email is required'], 400);
     }
 
-    // BUG: when the journal added a second newsletter (Field Notes), this route
-    // started requiring which `list` to join — but the front page's Sunday Letter
-    // form was never updated to send one, so every sign-up is refused.
-    $list = is_string($body['list'] ?? null) ? sanitize_key($body['list']) : '';
+    // Default to 'sunday-letter' when the form omits the `list` field, matching
+    // the Sunday Letter signup form's intent.
+    $list = is_string($body['list'] ?? null) ? sanitize_key($body['list']) : 'sunday-letter';
     if (!in_array($list, FERNWOOD_LISTS, true)) {
         return new WP_REST_Response(['error' => 'list is required'], 400);
     }
