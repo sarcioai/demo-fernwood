@@ -8,17 +8,26 @@ declare(strict_types=1);
  * run, this repo's theme and mu-plugin, and a programmatic install (the same
  * `wp_install()` WP-CLI calls).
  *
- *   php setup.php --dir=/var/www/wp [--force]
+ *   php setup.php --dir=/var/www/wp [--data-dir=/var/lib/fernwood]
+ *                 [--cache-dir=/tmp/fernwood-cache] [--force]
  *
- * Idempotent and cached: an existing install is reused, and the core tarball is
- * kept next to it so a re-run needs no network. Prints the install path.
+ * Idempotent and cached: an existing install is reused, and the downloads are
+ * kept in the cache directory so a re-run needs no network. Prints the install
+ * path.
+ *
+ * `--dir` is the web root. The SQLite database (`--data-dir`, the drop-in's
+ * `DB_DIR`) and the download cache (`--cache-dir`) must live OUTSIDE it: PHP's
+ * built-in server ignores the drop-in's `.htaccess`, so anything under the web
+ * root is downloadable.
  */
 
 const WP_TARBALL_URL = 'https://wordpress.org/latest.tar.gz';
 const SQLITE_PLUGIN_URL = 'https://downloads.wordpress.org/plugin/sqlite-database-integration.zip';
 
-$opts = getopt('', ['dir:', 'force', 'quiet']);
+$opts = getopt('', ['dir:', 'data-dir:', 'cache-dir:', 'force', 'quiet']);
 $dir = rtrim((string) ($opts['dir'] ?? sys_get_temp_dir() . '/fernwood'), '/');
+$dataDir = rtrim((string) ($opts['data-dir'] ?? sys_get_temp_dir() . '/fernwood-data'), '/');
+$cache = rtrim((string) ($opts['cache-dir'] ?? sys_get_temp_dir() . '/fernwood-cache'), '/');
 $force = isset($opts['force']);
 $quiet = isset($opts['quiet']);
 
@@ -71,14 +80,27 @@ if ($force) {
     rmrf($dir . '/wp-admin');
     rmrf($dir . '/wp-content');
     @unlink($dir . '/wp-config.php');
+    @unlink($dataDir . '/.ht.sqlite');
     foreach (glob($dir . '/*.php') ?: [] as $file) {
         @unlink($file);
     }
 }
 
+/** True when $path is $root or anything beneath it (neither need exist yet). */
+function is_within(string $path, string $root): bool
+{
+    $normalize = static fn (string $p): string => rtrim((string) (realpath($p) ?: $p), '/') . '/';
+    return str_starts_with($normalize($path), $normalize($root));
+}
+
 @mkdir($dir, 0o755, true);
-$cache = $dir . '/.cache';
+@mkdir($dataDir, 0o700, true);
 @mkdir($cache, 0o755, true);
+foreach (['--data-dir' => $dataDir, '--cache-dir' => $cache] as $flag => $path) {
+    if (is_within($path, $dir) || is_within($dir, $path)) {
+        fail("$flag ($path) must be outside the web root ($dir)");
+    }
+}
 
 // --- 1. WordPress core ------------------------------------------------------
 
@@ -149,6 +171,7 @@ if (!is_file($dir . '/wp-config.php')) {
     foreach (['AUTH_KEY', 'SECURE_AUTH_KEY', 'LOGGED_IN_KEY', 'NONCE_KEY', 'AUTH_SALT', 'SECURE_AUTH_SALT', 'LOGGED_IN_SALT', 'NONCE_SALT'] as $name) {
         $salts .= sprintf("define('%s', '%s');\n", $name, bin2hex(random_bytes(24)));
     }
+    $dbDir = var_export($dataDir . '/', true);
     $plugin = var_export(getenv('SARCIO_PLUGIN_DIR') ?: __DIR__ . '/vendor/sarcio/wordpress', true);
     // The DB_* constants are inert under the SQLite drop-in, but core still
     // expects them to be defined.
@@ -161,6 +184,9 @@ if (!is_file($dir . '/wp-config.php')) {
     define('DB_HOST', 'localhost');
     define('DB_CHARSET', 'utf8mb4');
     define('DB_COLLATE', '');
+    // The SQLite file lives outside the web root: the built-in server ignores the
+    // drop-in's .htaccess, so wp-content/database/ would be downloadable.
+    define('DB_DIR', {$dbDir});
     {$salts}
     \$table_prefix = 'wp_';
 

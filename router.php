@@ -23,6 +23,28 @@ $path = is_string($path) ? $path : '/';
 
 $home = $base === '' ? '/' : $base;
 
+/**
+ * Refuse what must never be downloadable, before anything else is considered.
+ * PHP's built-in server honours no `.htaccess`, so this router is the only web
+ * rule in front of the install. The database and download cache already live
+ * outside the web root (see setup.php); this is defence in depth in case one
+ * ever lands back inside it: any dot-segment (`.ht.sqlite`, `.cache/`,
+ * `.htaccess`, `.git/`), the drop-in's `wp-content/database/`, the Sarcio
+ * plugin's file-swap backups in `wp-content/sarcio/`, and database, archive,
+ * dump and log files by extension. Checked on the decoded path, so
+ * percent-encoding does not slip past it.
+ */
+$decoded = rawurldecode($path);
+if (
+    preg_match('#(^|/)\.#', $decoded) === 1
+    || preg_match('#/wp-content/(database|sarcio)(/|$)#i', $decoded) === 1
+    || preg_match('#\.(sqlite3?|db|sql|tar|t?gz|zip|bak|log)$#i', $decoded) === 1
+) {
+    http_response_code(404);
+    echo 'not found';
+    return true;
+}
+
 if ($base !== '' && $path === $base . '/') {
     $query = parse_url((string) ($_SERVER['REQUEST_URI'] ?? ''), PHP_URL_QUERY);
     header('Location: ' . $home . (is_string($query) && $query !== '' ? '?' . $query : ''), true, 301);

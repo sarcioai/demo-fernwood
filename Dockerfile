@@ -23,7 +23,12 @@ WORKDIR /app
 COPY --from=deps /app/vendor ./vendor
 COPY setup.php router.php docker-entrypoint.sh ./
 COPY wp-content ./wp-content
-RUN php /app/setup.php --dir=/var/www/wp && chown -R www-data:www-data /var/www/wp
+# The web root is /var/www/wp; the SQLite database (the drop-in's DB_DIR) and the
+# download cache stay OUTSIDE it, because PHP's built-in server ignores the
+# drop-in's .htaccess and would serve them. The cache is build-only.
+RUN php /app/setup.php --dir=/var/www/wp --data-dir=/var/lib/fernwood --cache-dir=/tmp/fernwood-cache \
+  && rm -rf /tmp/fernwood-cache \
+  && chown -R www-data:www-data /var/www/wp /var/lib/fernwood
 
 # The built-in server handles one request at a time unless told otherwise; the
 # widget, REST calls and assets arrive in parallel.

@@ -50,8 +50,20 @@ docker run -p 4013:4013 -e SARCIO_BASE_PATH=/fernwood demo-fernwood
 Env, per the Sarcio demo image contract: `PORT`, `SARCIO_BASE_PATH`,
 `SARCIO_SITE_KEY`, `SARCIO_SIDECAR_DSN`, `SARCIO_SHIM_TOKEN`, `SARCIO_API_URL`,
 `SARCIO_WIDGET_SRC`. Behind a proxy, send `X-Forwarded-Proto` so WordPress emits
-URLs in the visitor's scheme. On nginx, deny `<base>/wp-content/sarcio/` (the
-plugin's file-swap backups).
+URLs in the visitor's scheme.
+
+The web root is `/var/www/wp`. The SQLite database lives outside it, in
+`/var/lib/fernwood` (the drop-in's `DB_DIR`), and the core download cache is
+build-only, because PHP's built-in server ignores the drop-in's `.htaccess`.
+`router.php` also 404s dot-segments, `wp-content/database/`,
+`wp-content/sarcio/` (the plugin's file-swap backups) and database, archive and
+log files, so the image is safe without a proxy in front; a proxy should still
+deny the same paths. The database is baked at build and not on a volume:
+recreating the container resets the site to its seeded state.
+
+Outside Docker, `php setup.php --dir=… --data-dir=… --cache-dir=…` provisions
+the same layout (both default to directories under the system temp dir, and
+setup refuses either one inside `--dir`).
 
 ## Release
 
