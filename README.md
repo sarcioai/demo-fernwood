@@ -8,7 +8,7 @@ Sarcio repo):
 | | |
 | --- | --- |
 | Workspace | `fernwood` (`fernwood.sarcio.io`) |
-| Served at | `demos.sarcio.io/fernwood/` |
+| Served at | `demos.sarcio.io/fernwood` |
 | Patch kinds | DOM patch (browser) + server patch (the Sarcio WordPress plugin, through a Go sidecar) |
 | Forge | GitHub — this repo, where the permanent-fix PR opens |
 
@@ -44,7 +44,7 @@ exactly as a customer installs it.
 ```bash
 docker build --secret id=composer_auth,src=auth.json -t demo-fernwood .
 docker run -p 4013:4013 -e SARCIO_BASE_PATH=/fernwood demo-fernwood
-# http://localhost:4013/fernwood/
+# http://localhost:4013/fernwood
 ```
 
 Env, per the Sarcio demo image contract: `PORT`, `SARCIO_BASE_PATH`,
