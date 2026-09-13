@@ -45,7 +45,7 @@ $essays = [
       <p>One essay, one field sketch, every Sunday morning. No noise.</p>
       <form id="newsletter">
         <input id="subscriber-email" type="email" placeholder="you@example.com" required />
-        <button type="submit" class="subscribe" id="subscribe" disabled>Subscribe</button>
+        <button type="submit" class="subscribe" id="subscribe">Subscribe</button>
       </form>
       <div class="result" id="newsletter-result"></div>
     </section>
