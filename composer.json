@@ -5,11 +5,10 @@
   "license": "UNLICENSED",
   "require": {
     "php": ">=8.2",
-    "sarcio/wordpress": "^0.1.1"
+    "sarcio/wordpress": "^0.2"
   },
   "repositories": [
-    { "type": "vcs", "url": "https://github.com/sarcioai/sarcio-wordpress" },
-    { "type": "vcs", "url": "https://github.com/sarcioai/sarcio-php-shim" }
+    { "type": "vcs", "url": "https://github.com/sarcioai/sarcio-wordpress" }
   ],
   "config": { "sort-packages": true }
 }
