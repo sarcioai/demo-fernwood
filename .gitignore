@@ -1,2 +1,5 @@
 vendor/
 .DS_Store
+
+# Editor project settings (JetBrains)
+.idea/
