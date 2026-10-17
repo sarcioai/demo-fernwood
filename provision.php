@@ -62,6 +62,9 @@ $settings = [
     'woocommerce_default_country' => 'US:OR',
     'woocommerce_default_customer_address' => 'base',
     'woocommerce_enable_guest_checkout' => 'yes',
+    // Stock isn't tracked: WooCommerce's checkout-time stock reservation runs a
+    // query the SQLite drop-in can't translate, which refuses every order.
+    'woocommerce_manage_stock' => 'no',
     'woocommerce_enable_reviews' => 'no',
     'woocommerce_onboarding_profile' => ['skipped' => true],
     'woocommerce_ship_to_countries' => 'specific',
@@ -162,8 +165,8 @@ foreach ($products as [$slug, $category, $name, $price, $featured, $short, $desc
     $product->set_short_description($short);
     $product->set_description($description);
     $product->set_category_ids([$categoryIds[$category]]);
-    $product->set_manage_stock(true);
-    $product->set_stock_quantity(random_int(12, 40));
+    $product->set_manage_stock(false);
+    $product->set_stock_status('instock');
     $product->set_status('publish');
 
     if (!$product->get_image_id()) {
