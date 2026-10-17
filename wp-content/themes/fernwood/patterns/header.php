@@ -46,7 +46,14 @@ $fernwood_links = [
 <!-- /wp:paragraph -->
 <?php endforeach; ?>
 <!-- wp:woocommerce/customer-account {"displayStyle":"icon_only","iconStyle":"line"} /-->
+<?php
+// WooCommerce hides the mini cart on the cart and checkout pages but still
+// loads its script there, without the store settings it needs, so it requests
+// `undefinedwc/store/v1/cart`. Leave it off those pages instead.
+if (!is_cart() && !is_checkout()) :
+    ?>
 <!-- wp:woocommerce/mini-cart {"addToCartBehaviour":"open_drawer"} /-->
+<?php endif; ?>
 </div>
 <!-- /wp:group -->
 </div>
