@@ -5,7 +5,7 @@
   "license": "UNLICENSED",
   "require": {
     "php": ">=8.2",
-    "sarcio/wordpress": "^0.6.0"
+    "sarcio/wordpress": "^0.6.1"
   },
   "repositories": [
     { "type": "vcs", "url": "https://github.com/sarcioai/sarcio-wordpress" }
