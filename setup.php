@@ -243,19 +243,17 @@ if (!is_file($dir . '/wp-config.php')) {
     define('WP_SITEURL', WP_HOME);
 
     // --- Sarcio, pinned exactly as a real deploy would ---------------------
-    // Every setting is constant-pinnable, so the demo writes no settings to the
-    // database and the settings screen shows each field as deploy-managed.
+    // The two keys are saved as ordinary settings at start-up (connect.php),
+    // the way a site owner pastes them in; everything else is pinned here.
     define('FERNWOOD_SARCIO_PLUGIN', {$plugin});
-    define('SARCIO_SITE_KEY', getenv('SARCIO_SITE_KEY') ?: 'pk_demo_fernwood');
     define('SARCIO_API_URL', getenv('SARCIO_API_URL') ?: 'http://control.sarcio.local');
     define('SARCIO_WIDGET_SRC', getenv('SARCIO_WIDGET_SRC') ?: SARCIO_API_URL . '/sarcio.js');
     // The demo shows the reporter to every visitor; a real public site should not.
     define('SARCIO_WIDGET_AUDIENCE', 'everyone');
     define('SARCIO_SERVER_SCOPE', 'all');
     // Server-side fixes without a sidecar: the plugin fetches the site's signed
-    // fixes itself with the sidecar key, exactly as on shared hosting. A sidecar
+    // fixes itself with the secret key, exactly as on shared hosting. A sidecar
     // DSN, when one is set, takes over as the fast path.
-    define('SARCIO_SIDECAR_KEY', getenv('SARCIO_SIDECAR_KEY') ?: '');
     if (getenv('SARCIO_SIDECAR_DSN')) {
         define('SARCIO_SIDECAR_DSN', getenv('SARCIO_SIDECAR_DSN'));
         define('SARCIO_SHIM_TOKEN', getenv('SARCIO_SHIM_TOKEN') ?: '');

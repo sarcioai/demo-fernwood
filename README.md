@@ -46,6 +46,9 @@ Environment: `PORT`, `SARCIO_BASE_PATH`, `SARCIO_SITE_KEY`, `SARCIO_API_URL`,
 tier), and optionally `SARCIO_SIDECAR_DSN` + `SARCIO_SHIM_TOKEN` to use a sidecar
 instead, and `FERNWOOD_ADMIN_PASSWORD` for wp-admin. Behind a proxy, send
 `X-Forwarded-Proto` so WordPress emits URLs in the visitor's scheme.
+The site key, the secret key and the admin password are applied each time the
+container starts (`connect.php`), so Settings → Sarcio shows the keys the way a
+site owner would have pasted them in.
 
 The store is stocked at build time (`setup.php`, then `provision.php`) and the
 database is baked into the image, so recreating the container resets the store

@@ -9,4 +9,5 @@ if [ -n "$base" ]; then
   ln -sfn /var/www/wp "/var/www/html$base"
   docroot=/var/www/html
 fi
+php /app/connect.php
 exec php -d memory_limit=256M -S "0.0.0.0:${PORT:-4013}" -t "$docroot" /app/router.php

@@ -23,7 +23,7 @@ RUN apk add --no-cache tar unzip sqlite-libs libpng libjpeg-turbo libwebp freety
 
 WORKDIR /app
 COPY --from=deps /app/vendor ./vendor
-COPY setup.php provision.php router.php docker-entrypoint.sh ./
+COPY setup.php provision.php router.php connect.php docker-entrypoint.sh ./
 COPY wp-content ./wp-content
 COPY assets ./assets
 # The web root is /var/www/wp; the SQLite database (the drop-in's DB_DIR) and the
