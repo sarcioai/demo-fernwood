@@ -133,8 +133,8 @@ foreach ($categories as $slug => [$name, $description]) {
 $products = [
     ['monstera', 'houseplants', 'Monstera deliciosa', '38.00', true, '6-inch nursery pot · bright, indirect light',
         'Our best-selling houseplant, grown from cuttings in our east greenhouse. Big split leaves that keep coming all year. Happy in bright, indirect light and a weekly drink once the top inch of soil is dry.'],
-    ['fiddle-leaf-fig', 'houseplants', 'Fiddle-leaf fig', '68.00', false, '10-inch pot · about 3 ft tall',
-        'A tall, architectural fig with glossy violin-shaped leaves. It likes a bright spot it can stay in: pick the window, then leave it be.'],
+    ['fiddle-leaf-fig', 'houseplants', 'Fiddle-leaf fig', '42.00', false, '6-inch pot · about 18 in tall',
+        'A young fig with glossy, violin-shaped leaves that will grow into a tall, architectural plant. It likes a bright spot it can stay in: pick the window, then leave it be.'],
     ['snake-plant', 'houseplants', "Snake plant 'Laurentii'", '29.00', true, '6-inch ceramic pot · low light OK',
         'Upright, yellow-edged leaves that shrug off low light and a forgotten watering or two. The plant we recommend for first-time plant owners and north-facing rooms.'],
     ['golden-pothos', 'houseplants', 'Golden pothos', '24.00', false, '6-inch pot · trailing',
