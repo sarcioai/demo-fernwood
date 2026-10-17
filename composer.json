@@ -1,11 +1,11 @@
 {
   "name": "sarcio/demo-fernwood",
-  "description": "Fernwood Journal (fictional) — a real WordPress whose subscribe button and newsletter route are both broken, patched live by the Sarcio plugin.",
+  "description": "Fernwood Nursery (fictional) — a real WordPress and WooCommerce store whose Add to cart button and delivery check are both broken, fixed live by the Sarcio plugin.",
   "type": "project",
   "license": "UNLICENSED",
   "require": {
     "php": ">=8.2",
-    "sarcio/wordpress": "^0.2"
+    "sarcio/wordpress": "^0.3"
   },
   "repositories": [
     { "type": "vcs", "url": "https://github.com/sarcioai/sarcio-wordpress" }

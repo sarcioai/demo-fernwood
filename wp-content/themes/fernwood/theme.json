@@ -1,0 +1,97 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "color": {
+      "palette": [
+        { "color": "#FBF8F1", "name": "Base", "slug": "base" },
+        { "color": "#1F2A22", "name": "Contrast", "slug": "contrast" },
+        { "color": "#2F4A3A", "name": "Forest", "slug": "forest" },
+        { "color": "#6B8F5E", "name": "Moss", "slug": "moss" },
+        { "color": "#E4EBDD", "name": "Moss 50", "slug": "moss-50" },
+        { "color": "#C46D4A", "name": "Clay", "slug": "clay" },
+        { "color": "#F1E9DA", "name": "Linen", "slug": "linen" },
+        { "color": "#5E6A60", "name": "Stone", "slug": "stone" }
+      ]
+    },
+    "typography": {
+      "fontFamilies": [
+        {
+          "fontFace": [
+            {
+              "fontFamily": "Manrope",
+              "fontStyle": "normal",
+              "fontWeight": "200 800",
+              "src": ["file:./assets/fonts/manrope/Manrope-VariableFont_wght.woff2"]
+            }
+          ],
+          "fontFamily": "Manrope, sans-serif",
+          "name": "Manrope",
+          "slug": "manrope"
+        },
+        {
+          "fontFace": [
+            {
+              "fontFamily": "Literata",
+              "fontStyle": "normal",
+              "fontWeight": "400",
+              "src": ["file:./assets/fonts/literata/Literata72pt-Regular.woff2"]
+            },
+            {
+              "fontFamily": "Literata",
+              "fontStyle": "italic",
+              "fontWeight": "400",
+              "src": ["file:./assets/fonts/literata/Literata72pt-RegularItalic.woff2"]
+            },
+            {
+              "fontFamily": "Literata",
+              "fontStyle": "normal",
+              "fontWeight": "500",
+              "src": ["file:./assets/fonts/literata/Literata72pt-Medium.woff2"]
+            },
+            {
+              "fontFamily": "Literata",
+              "fontStyle": "normal",
+              "fontWeight": "600",
+              "src": ["file:./assets/fonts/literata/Literata72pt-SemiBold.woff2"]
+            }
+          ],
+          "fontFamily": "Literata, Georgia, serif",
+          "name": "Literata",
+          "slug": "literata"
+        }
+      ]
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "var:preset|color|base",
+      "text": "var:preset|color|contrast"
+    },
+    "elements": {
+      "button": {
+        ":hover": {
+          "color": { "background": "var:preset|color|contrast", "text": "var:preset|color|base" }
+        },
+        "border": { "radius": "999px" },
+        "color": { "background": "var:preset|color|forest", "text": "var:preset|color|base" },
+        "typography": { "fontWeight": "600" }
+      },
+      "heading": {
+        "color": { "text": "var:preset|color|forest" },
+        "typography": {
+          "fontFamily": "var:preset|font-family|literata",
+          "fontWeight": "500",
+          "letterSpacing": "-0.01em"
+        }
+      },
+      "link": {
+        ":hover": { "color": { "text": "var:preset|color|clay" } },
+        "color": { "text": "var:preset|color|forest" }
+      }
+    },
+    "typography": {
+      "fontFamily": "var:preset|font-family|manrope"
+    }
+  }
+}

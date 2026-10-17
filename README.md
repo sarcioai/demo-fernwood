@@ -1,40 +1,37 @@
 # demo-fernwood
 
-**Fernwood Journal** is a fictional publication running a real WordPress. Its
-front page carries two seeded bugs that [Sarcio](https://www.sarcio.io) fixes
-live: one in the browser, one on the server.
+**Fernwood Nursery** is a fictional plant nursery in Portland, Oregon, selling
+online through a real WordPress and WooCommerce store. Two things on it are
+broken, the way things break on real stores after an update, and
+[Sarcio](https://www.sarcio.io) fixes both live: one in the browser, one on the
+server.
 
 |           |                                                              |
 | --------- | ------------------------------------------------------------ |
 | Live demo | [demos.sarcio.io/fernwood](https://demos.sarcio.io/fernwood) |
-| Shows     | a front-end fix and a server-side fix, through the Sarcio WordPress plugin |
+| Shows     | a front-end fix and a server-side fix through the Sarcio WordPress plugin, with no sidecar |
 | Fix PR    | opens on this repository (GitHub)                            |
 
-WordPress core comes from wordpress.org, the database is the official **SQLite
-drop-in** (no database server), and the Sarcio plugin is an ordinary Composer
-dependency, exactly as a customer installs it.
+WordPress core, WooCommerce and the official **SQLite drop-in** (no database
+server) come from wordpress.org, and the Sarcio plugin is an ordinary Composer
+dependency, exactly as a customer installs it. The server tier runs the way it
+does on shared hosting: the plugin fetches and verifies the site's signed fixes
+itself with the site's sidecar key, and nothing else runs beside WordPress.
 
-## The seeded bugs
+## What's broken
 
-1. **In the browser.** The Sunday Letter's Subscribe button in
-   `wp-content/themes/fernwood/front-page.php` ships with `disabled` on it, so
-   nobody can subscribe. Once a fix is approved in Sarcio the button works for
-   every visitor. The pull request with the permanent fix edits
-   `front-page.php`.
-2. **On the server.** With the button working, the form reaches
-   `POST /fernwood/wp-json/fernwood/v1/subscribe` (in
-   `wp-content/mu-plugins/fernwood-newsletter.php`), which since the journal
-   added a second newsletter demands a `list` the Sunday Letter form never
-   sends:
-
-   ```bash
-   curl -XPOST localhost:4013/fernwood/wp-json/fernwood/v1/subscribe \
-     -H content-type:application/json -d '{"email":"ada@example.com"}'
-   # -> 400 {"error":"list is required"}
-   ```
-
-   Once a fix is approved in Sarcio the signup succeeds, without a restart. If
-   Sarcio is unavailable the site simply behaves as it did before.
+1. **"Add to cart is greyed out."** The theme's copy of WooCommerce's
+   add-to-cart template (`wp-content/themes/fernwood/woocommerce/single-product/add-to-cart/simple.php`)
+   was overridden for a spring pre-order season and still carries `disabled`
+   on the button, so no plant page can take an order. A fix approved in Sarcio
+   re-enables the button for every visitor; the pull request with the
+   permanent fix edits that template.
+2. **"Checkout says we don't deliver to 97202."** The nursery's own delivery
+   plugin (`wp-content/mu-plugins/fernwood-local-delivery.php`) imports its ZIP
+   list as numbers and compares it strictly against the ZIP typed at checkout,
+   so it refuses every address, the nursery's own included. A fix approved in
+   Sarcio lets checkout through while the permanent fix is reviewed. If Sarcio
+   is unavailable the site behaves exactly as it did before.
 
 ## Run it
 
@@ -44,15 +41,17 @@ docker run -p 4013:4013 -e SARCIO_BASE_PATH=/fernwood demo-fernwood
 # http://localhost:4013/fernwood
 ```
 
-Environment: `PORT`, `SARCIO_BASE_PATH`, `SARCIO_SITE_KEY`,
-`SARCIO_SIDECAR_DSN`, `SARCIO_SHIM_TOKEN`, `SARCIO_API_URL`,
-`SARCIO_WIDGET_SRC`. Behind a proxy, send `X-Forwarded-Proto` so WordPress emits
-URLs in the visitor's scheme.
+Environment: `PORT`, `SARCIO_BASE_PATH`, `SARCIO_SITE_KEY`, `SARCIO_API_URL`,
+`SARCIO_WIDGET_SRC`, `SARCIO_SIDECAR_KEY` (the site's `sk_` key, for the server
+tier), and optionally `SARCIO_SIDECAR_DSN` + `SARCIO_SHIM_TOKEN` to use a sidecar
+instead, and `FERNWOOD_ADMIN_PASSWORD` for wp-admin. Behind a proxy, send
+`X-Forwarded-Proto` so WordPress emits URLs in the visitor's scheme.
 
-The database is baked into the image and not on a volume, so recreating the
-container resets the site to its seeded state. `router.php` refuses database,
-archive and log files and the plugin's backup directory, so the image is safe
-without a proxy in front; a proxy should still deny the same paths.
+The store is stocked at build time (`setup.php`, then `provision.php`) and the
+database is baked into the image, so recreating the container resets the store
+to its broken state. `router.php` refuses database, archive and log files, so
+the image is safe without a proxy in front; a proxy should still deny the same
+paths.
 
-Outside Docker, `php setup.php --dir=… --data-dir=… --cache-dir=…` provisions
-the same layout.
+Photos are from Unsplash, used under the Unsplash License (see
+[`assets/CREDITS.md`](assets/CREDITS.md)).

@@ -3,19 +3,20 @@
 declare(strict_types=1);
 
 /**
- * Fernwood theme setup. Nothing here knows about Sarcio: the plugin enqueues its
- * reporter widget onto every page through `wp_enqueue_scripts`, exactly as it
- * would on any theme.
+ * Fernwood Nursery theme setup. A child of Twenty Twenty-Five, so WooCommerce's
+ * block templates (shop, product, cart, checkout) come from the parent and
+ * WooCommerce itself; this theme adds the nursery's colours, type, header,
+ * footer and front page.
  */
 
 defined('ABSPATH') || exit;
 
-add_action('after_setup_theme', static function (): void {
-    add_theme_support('title-tag');
-});
-
 add_action('wp_enqueue_scripts', static function (): void {
     wp_enqueue_style('fernwood', get_stylesheet_uri(), [], wp_get_theme()->get('Version'));
+});
+
+add_action('after_setup_theme', static function (): void {
+    add_theme_support('woocommerce');
 });
 
 // The front page's canonical address is the bare base (`/fernwood`, which is
