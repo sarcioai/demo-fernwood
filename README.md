@@ -42,7 +42,7 @@ docker run -p 4013:4013 -e SARCIO_BASE_PATH=/fernwood demo-fernwood
 ```
 
 Environment: `PORT`, `SARCIO_BASE_PATH`, `SARCIO_SITE_KEY`, `SARCIO_API_URL`,
-`SARCIO_WIDGET_SRC`, `SARCIO_SIDECAR_KEY` (the site's `sk_` key, for the server
+`SARCIO_SIDECAR_KEY` (the site's `sk_` key, for the server
 tier), and optionally `SARCIO_SIDECAR_DSN` + `SARCIO_SHIM_TOKEN` to use a sidecar
 instead, and `FERNWOOD_ADMIN_PASSWORD` for wp-admin. Behind a proxy, send
 `X-Forwarded-Proto` so WordPress emits URLs in the visitor's scheme.

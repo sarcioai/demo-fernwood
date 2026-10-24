@@ -256,7 +256,6 @@ if (!is_file($dir . '/wp-config.php')) {
     // the way a site owner pastes them in; everything else is pinned here.
     define('FERNWOOD_SARCIO_PLUGIN', {$plugin});
     define('SARCIO_API_URL', getenv('SARCIO_API_URL') ?: 'http://control.sarcio.local');
-    define('SARCIO_WIDGET_SRC', getenv('SARCIO_WIDGET_SRC') ?: SARCIO_API_URL . '/sarcio.js');
     // The demo shows the reporter to every visitor; a real public site should not.
     define('SARCIO_WIDGET_AUDIENCE', 'everyone');
     define('SARCIO_SERVER_SCOPE', 'all');
