@@ -15,4 +15,4 @@ jobs:
       - name: php -l
         run: |
           find . -name '*.php' -not -path './vendor/*' -print0 \
-            | xargs -0 -n1 docker run --rm -v "$PWD:/src" -w /src php:8.4-cli-alpine php -l
+            | xargs -0 -n1 docker run --rm -v "$PWD:/src" -w /src php:8.4.27-cli-alpine php -l

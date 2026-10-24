@@ -12,7 +12,7 @@ RUN --mount=type=secret,id=composer_auth,target=/tmp/auth.json \
     COMPOSER_AUTH="$(cat /tmp/auth.json 2>/dev/null || echo '{}')" \
     composer install --no-dev --no-interaction --no-progress
 
-FROM php:8.4-cli-alpine
+FROM php:8.4.27-cli-alpine
 # tar/unzip for the downloads; pdo_sqlite for the drop-in; gd for the product
 # thumbnails WooCommerce generates. The -dev packages are build-only.
 RUN apk add --no-cache tar unzip sqlite-libs libpng libjpeg-turbo libwebp freetype \
@@ -20,6 +20,7 @@ RUN apk add --no-cache tar unzip sqlite-libs libpng libjpeg-turbo libwebp freety
   && docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype \
   && docker-php-ext-install pdo_sqlite gd \
   && apk del .build-deps
+RUN echo "session.upload_progress.enabled=0" > /usr/local/etc/php/conf.d/zz-hardening.ini
 
 WORKDIR /app
 COPY --from=deps /app/vendor ./vendor
